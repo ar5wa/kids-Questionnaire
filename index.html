@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>دار الأجيال — استمارة تسجيل الطالبات</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --emerald-950:#0b2e22;
+    --emerald-900:#0f3d2e;
+    --emerald-800:#164a37;
+    --gold:#c9a03d;
+    --gold-light:#e6c876;
+    --parchment:#f3ead3;
+    --parchment-light:#faf5e7;
+    --ink:#241f16;
+    --rose:#b85c5c;
+    --line: rgba(36,31,22,.12);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--parchment);
+    color:var(--ink);
+    font-family:'Tajawal',sans-serif;
+    line-height:1.7;
+  }
+  h1,h2,h3,.display{
+    font-family:'Amiri',serif;
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important; transition:none !important;}
+  }
+
+  /* ---------- Pattern border ---------- */
+  .pattern-strip{
+    height:14px;
+    width:100%;
+    background:
+      linear-gradient(135deg, var(--gold) 25%, transparent 25%) -7px 0,
+      linear-gradient(225deg, var(--gold) 25%, transparent 25%) -7px 0,
+      linear-gradient(45deg, var(--gold) 25%, transparent 25%),
+      linear-gradient(315deg, var(--gold) 25%, var(--emerald-950) 25%);
+    background-position: 0 0, 0 0, 7px 0, 7px 0;
+    background-size: 14px 14px;
+    background-repeat:repeat-x;
+  }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    background:radial-gradient(120% 140% at 50% -10%, var(--emerald-800), var(--emerald-950) 70%);
+    color:var(--parchment-light);
+    text-align:center;
+    padding:64px 20px 56px;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero::before{
+    content:"";
+    position:absolute; inset:0;
+    background-image:radial-gradient(var(--gold) 1px, transparent 1px);
+    background-size:26px 26px;
+    opacity:.08;
+    pointer-events:none;
+  }
+  .eyebrow{
+    display:inline-block;
+    font-size:13px;
+    letter-spacing:.12em;
+    color:var(--gold-light);
+    border:1px solid rgba(230,200,118,.4);
+    border-radius:999px;
+    padding:6px 18px;
+    margin-bottom:22px;
+  }
+  .hero h1{
+    font-size:clamp(32px,6vw,52px);
+    margin:0 0 14px;
+    font-weight:700;
+  }
+  .hero p{
+    max-width:560px;
+    margin:0 auto;
+    font-size:16px;
+    color:rgba(250,245,231,.82);
+  }
+  .hero .sub-line{
+    margin-top:28px;
+    display:flex; gap:28px; justify-content:center; flex-wrap:wrap;
+    font-size:13px;
+    color:var(--gold-light);
+  }
+  .hero .sub-line span{display:flex; align-items:center; gap:8px;}
+  .hero .sub-line b{color:var(--parchment-light); font-weight:500;}
+
+  /* ---------- Chain progress (signature element) ---------- */
+  .chain-wrap{
+    max-width:640px;
+    margin:40px auto 0;
+    padding:0 20px;
+  }
+  .chain{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+  .bead-track{
+    position:relative;
+    flex:1;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+  }
+  .bead-track::before{
+    content:"";
+    position:absolute;
+    top:50%; right:0; left:0;
+    height:2px;
+    background:rgba(230,200,118,.25);
+    transform:translateY(-50%);
+    z-index:0;
+  }
+  .bead-track .fill{
+    position:absolute;
+    top:50%; right:0;
+    height:2px;
+    background:var(--gold);
+    transform:translateY(-50%);
+    z-index:1;
+    transition:width .5s ease;
+    width:0%;
+  }
+  .bead{
+    position:relative; z-index:2;
+    width:34px; height:34px;
+    border-radius:50%;
+    background:var(--emerald-950);
+    border:2px solid rgba(230,200,118,.35);
+    display:flex; align-items:center; justify-content:center;
+    font-size:13px; color:rgba(250,245,231,.55);
+    font-weight:700;
+    transition:all .4s ease;
+  }
+  .bead.done{
+    background:var(--gold);
+    border-color:var(--gold);
+    color:var(--emerald-950);
+    box-shadow:0 0 0 5px rgba(201,160,61,.18);
+  }
+  .bead.current{
+    border-color:var(--gold-light);
+    color:var(--gold-light);
+    box-shadow:0 0 0 5px rgba(230,200,118,.16);
+  }
+  .chain-labels{
+    display:flex; justify-content:space-between;
+    margin-top:10px;
+    font-size:11px;
+    color:rgba(250,245,231,.55);
+  }
+  .chain-labels span{width:80px; text-align:center;}
+  .chain-labels span:first-child{text-align:right; width:auto;}
+  .chain-labels span:last-child{text-align:left; width:auto;}
+
+  /* ---------- Form shell ---------- */
+  main{
+    max-width:640px;
+    margin:-30px auto 60px;
+    padding:0 20px;
+    position:relative;
+    z-index:5;
+  }
+  form{
+    background:var(--parchment-light);
+    border:1px solid var(--line);
+    border-radius:18px;
+    box-shadow:0 30px 60px -30px rgba(15,61,46,.35);
+    overflow:hidden;
+  }
+  .step{
+    display:none;
+    padding:34px 30px 30px;
+    animation:fadeIn .4s ease;
+  }
+  .step.active{display:block;}
+  @keyframes fadeIn{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
+
+  .step-eyebrow{
+    display:flex; align-items:center; gap:10px;
+    color:var(--rose);
+    font-weight:700;
+    font-size:13px;
+    letter-spacing:.06em;
+    margin-bottom:6px;
+  }
+  .step-eyebrow .num{
+    font-family:'Amiri',serif;
+    font-size:20px;
+    color:var(--emerald-900);
+  }
+  .step h2{
+    margin:0 0 22px;
+    font-size:24px;
+    color:var(--emerald-950);
+    border-bottom:2px solid var(--line);
+    padding-bottom:14px;
+  }
+
+  .field{margin-bottom:20px;}
+  .field label{
+    display:block;
+    font-size:14px;
+    font-weight:500;
+    margin-bottom:7px;
+    color:var(--ink);
+  }
+  .field label .req{color:var(--rose); margin-inline-start:3px;}
+  .field input[type=text],
+  .field input[type=date],
+  .field select{
+    width:100%;
+    padding:12px 14px;
+    border:1.5px solid var(--line);
+    border-radius:10px;
+    background:#fff;
+    font-family:'Tajawal',sans-serif;
+    font-size:15px;
+    color:var(--ink);
+    transition:border-color .2s;
+  }
+  .field input:focus, .field select:focus{
+    outline:none;
+    border-color:var(--gold);
+    box-shadow:0 0 0 3px rgba(201,160,61,.18);
+  }
+  .hint{font-size:12.5px; color:#7a7261; margin-top:6px;}
+
+  .choice-group{display:flex; gap:12px; flex-wrap:wrap;}
+  .choice-card{
+    flex:1; min-width:150px;
+    border:1.5px solid var(--line);
+    border-radius:12px;
+    padding:14px 16px;
+    cursor:pointer;
+    position:relative;
+    transition:border-color .2s, background .2s;
+  }
+  .choice-card input{position:absolute; opacity:0; inset:0; cursor:pointer;}
+  .choice-card b{display:block; font-size:14.5px; color:var(--emerald-950);}
+  .choice-card span{font-size:12.5px; color:#7a7261;}
+  .choice-card:has(input:checked){
+    border-color:var(--gold);
+    background:#fdf8ec;
+  }
+
+  .bank-card{
+    background:var(--emerald-950);
+    color:var(--parchment-light);
+    border-radius:14px;
+    padding:20px 22px;
+    margin-bottom:22px;
+  }
+  .bank-card .row{
+    display:flex; justify-content:space-between;
+    padding:9px 0;
+    border-bottom:1px dashed rgba(230,200,118,.25);
+    font-size:14px;
+  }
+  .bank-card .row:last-child{border-bottom:none;}
+  .bank-card .row span:first-child{color:rgba(250,245,231,.6);}
+  .bank-card .row span:last-child{font-weight:500; color:var(--gold-light); direction:ltr;}
+
+  .agree{
+    display:flex; gap:10px; align-items:flex-start;
+    background:#fdf8ec;
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:16px;
+    font-size:13.5px;
+    color:#544c3c;
+  }
+  .agree input{margin-top:3px;}
+
+  .nav-row{
+    display:flex; justify-content:space-between; align-items:center;
+    padding:20px 30px;
+    background:#efe6cc;
+    border-top:1px solid var(--line);
+  }
+  button{
+    font-family:'Tajawal',sans-serif;
+    font-weight:700;
+    font-size:14.5px;
+    border:none;
+    border-radius:10px;
+    padding:13px 26px;
+    cursor:pointer;
+    transition:transform .15s, opacity .2s;
+  }
+  button:active{transform:scale(.97);}
+  .btn-primary{background:var(--emerald-950); color:var(--gold-light);}
+  .btn-primary:hover{background:var(--emerald-900);}
+  .btn-ghost{background:transparent; color:var(--emerald-950); border:1.5px solid var(--line);}
+  .btn-primary:disabled{opacity:.45; cursor:not-allowed;}
+
+  .success{
+    display:none;
+    text-align:center;
+    padding:60px 30px;
+  }
+  .success.active{display:block;}
+  .success .icon{
+    width:64px; height:64px; border-radius:50%;
+    background:var(--emerald-950);
+    color:var(--gold-light);
+    display:flex; align-items:center; justify-content:center;
+    font-size:28px;
+    margin:0 auto 20px;
+  }
+  .success h2{color:var(--emerald-950); margin-bottom:10px;}
+  .success p{color:#7a7261; font-size:14.5px;}
+
+  footer{
+    text-align:center;
+    padding:30px 20px 50px;
+    font-size:12.5px;
+    color:#9a8f75;
+  }
+
+  @media (max-width:480px){
+    .chain-labels span{width:60px; font-size:10px;}
+    .step{padding:26px 18px 22px;}
+    .nav-row{padding:16px 18px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="pattern-strip"></div>
+
+<section class="hero">
+  <span class="eyebrow">دار الأجيال لتحفيظ القرآن الكريم</span>
+  <h1>سلسلةٌ تمتدّ من جيلٍ إلى جيل</h1>
+  <p>استمارة تسجيل الطالبات في حلقات التحفيظ — عبّئي بياناتك بدقّة، وسنكون معك خطوة بخطوة حتى اعتماد التسجيل بإذن الله.</p>
+  <div class="sub-line">
+    <span>🕰️ <b>الحضور:</b> ٦:٠٠ ص</span>
+    <span>💳 <b>الرسوم:</b> ٣٠٠ ريال / ترم</span>
+    <span>📿 <b>المسارات:</b> حضوري وعن بُعد</span>
+  </div>
+
+  <div class="chain-wrap">
+    <div class="chain">
+      <div class="bead-track" id="beadTrack">
+        <div class="fill" id="chainFill"></div>
+        <div class="bead current" data-step="1">١</div>
+        <div class="bead" data-step="2">٢</div>
+        <div class="bead" data-step="3">٣</div>
+        <div class="bead" data-step="4">٤</div>
+      </div>
+    </div>
+    <div class="chain-labels">
+      <span>الطالبة</span>
+      <span>المستوى</span>
+      <span>الدفع</span>
+      <span>التأكيد</span>
+    </div>
+  </div>
+</section>
+
+<main>
+  <form id="surveyForm">
+
+    <!-- Step 1 -->
+    <div class="step active" data-step="1">
+      <div class="step-eyebrow"><span class="num">١</span> بيانات الطالبة</div>
+      <h2>من نتشرّف باستقبالها؟</h2>
+
+      <div class="field">
+        <label>الاسم رباعيًا <span class="req">*</span></label>
+        <input type="text" name="name" required placeholder="مثال: سارة محمد عبدالله الحربي">
+      </div>
+
+      <div class="field">
+        <label>الجنسية <span class="req">*</span></label>
+        <select name="nationality" required>
+          <option value="">اختاري الجنسية</option>
+          <option>السعودية</option>
+          <option>الإمارات العربية المتحدة</option>
+          <option>الكويت</option>
+          <option>قطر</option>
+          <option>البحرين</option>
+          <option>عُمان</option>
+          <option>مصر</option>
+          <option>الأردن</option>
+          <option>اليمن</option>
+          <option>سوريا</option>
+          <option>فلسطين</option>
+          <option>أخرى</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>تاريخ الميلاد <span class="req">*</span></label>
+        <input type="date" name="dob" required>
+      </div>
+
+      <div class="field">
+        <label>المؤهل الدراسي <span class="req">*</span></label>
+        <select name="education" required>
+          <option value="">اختاري المؤهل الدراسي</option>
+          <option>ابتدائي</option>
+          <option>ثانوي</option>
+          <option>جامعي</option>
+          <option>دبلوم</option>
+          <option>أمهات قارئات</option>
+          <option>أمهات غير قارئات</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>الحي <span class="req">*</span></label>
+        <input type="text" name="neighborhood" required placeholder="للطالبات خارج المملكة: يكتفى بكتابة الدولة">
+      </div>
+
+      <div class="field">
+        <label>كيف تعرّفتِ على الدار؟ <span class="req">*</span></label>
+        <select name="source" required>
+          <option value="">اختاري</option>
+          <option>انستقرام</option>
+          <option>تويتر (إكس)</option>
+          <option>سناب شات</option>
+          <option>تيليجرام</option>
+          <option>توصية من صديقة / قريبة</option>
+          <option>طالبة سابقة في الدار</option>
+          <option>أخرى</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="step" data-step="2">
+      <div class="step-eyebrow"><span class="num">٢</span> طريقة الدراسة والمستوى</div>
+      <h2>أي طريقٍ يناسبكِ؟</h2>
+
+      <div class="field">
+        <label>طريقة الدراسة <span class="req">*</span></label>
+        <div class="choice-group">
+          <label class="choice-card">
+            <input type="radio" name="method" value="حضوري" required>
+            <b>حضوري</b>
+            <span>الحضور والانصراف حسب مواعيد الدار</span>
+          </label>
+          <label class="choice-card">
+            <input type="radio" name="method" value="عن بُعد">
+            <b>عن بُعد</b>
+            <span>حلقات إلكترونية حسب مواعيد المعلمة</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>المستوى (اسم الحلقة) <span class="req">*</span></label>
+        <select name="level" required>
+          <option value="">اختاري المستوى</option>
+          <option>تمهيدي</option>
+          <option>الابتدائي</option>
+          <option>المتوسط</option>
+          <option>الثانوي</option>
+          <option>الجامعي</option>
+          <option>الأمهات</option>
+        </select>
+        <p class="hint">يحقّ للإدارة تغيير المستوى بعد المقابلة إن لزم الأمر.</p>
+      </div>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="step" data-step="3">
+      <div class="step-eyebrow"><span class="num">٣</span> الدفع</div>
+      <h2>رسوم التسجيل</h2>
+      <p class="hint" style="margin-bottom:16px;">رسوم التسجيل لجميع المستويات (من الابتدائي إلى الأمهات) ٣٠٠ ريال للترم الواحد.</p>
+
+      <div class="bank-card">
+        <div class="row"><span>اسم الحساب</span><span>جمعية دار الأجيال لتعليم القرآن الكريم</span></div>
+        <div class="row"><span>رقم الحساب</span><span>0000000000000</span></div>
+        <div class="row"><span>رقم الآيبان</span><span>SA00 0000 0000 0000 0000 0000</span></div>
+        <div class="row"><span>اسم البنك</span><span>—</span></div>
+      </div>
+
+      <div class="field">
+        <label>تأكيد التحويل <span class="req">*</span></label>
+        <select name="paymentConfirm" required>
+          <option value="">اختاري</option>
+          <option>تم التحويل وسأرسل الإيصال عبر واتساب</option>
+          <option>لم يتم التحويل بعد</option>
+        </select>
+        <p class="hint">لا يُعتبر التسجيل مؤكدًا إلا بعد إرسال إيصال التحويل عبر واتساب الدار مع اسم الطالبة رباعيًا.</p>
+      </div>
+    </div>
+
+    <!-- Step 4 -->
+    <div class="step" data-step="4">
+      <div class="step-eyebrow"><span class="num">٤</span> إقرار وتعهّد</div>
+      <h2>خطوة أخيرة قبل الانضمام لسلسلة الأجيال</h2>
+
+      <label class="agree">
+        <input type="checkbox" name="agree" required>
+        <span>أقرّ بأنني قرأت كافة الشروط، وأتعهّد بتقديم معلومات صحيحة والالتزام بها، وفي حال ثبت خلاف ذلك يحقّ للإدارة اتخاذ الإجراءات اللازمة.</span>
+      </label>
+    </div>
+
+    <div class="nav-row">
+      <button type="button" class="btn-ghost" id="prevBtn" style="visibility:hidden;">السابق</button>
+      <button type="button" class="btn-primary" id="nextBtn">التالي</button>
+      <button type="submit" class="btn-primary" id="submitBtn" style="display:none;">إرسال طلب التسجيل</button>
+    </div>
+
+    <div class="success" id="successView">
+      <div class="icon">✓</div>
+      <h2>وصلنا طلبك بحمد الله</h2>
+      <p>سنراجع بياناتك ونتواصل معك قريبًا بإذن الله. لا تنسي إرسال إيصال التحويل عبر واتساب الدار لاعتماد التسجيل.</p>
+    </div>
+  </form>
+</main>
+
+<footer>
+  دار الأجيال لتحفيظ القرآن الكريم — سلسلةٌ من الإسناد تمتدّ عبر الأجيال
+</footer>
+
+<script>
+  // ====== CONFIG ======
+  // ضعي هنا رابط تطبيق Google Apps Script بعد نشره (Web App URL)
+  const GAS_URL = "PASTE_YOUR_GOOGLE_APPS_SCRIPT_URL_HERE";
+
+  const form = document.getElementById('surveyForm');
+  const steps = [...document.querySelectorAll('.step')];
+  const beads = [...document.querySelectorAll('.bead')];
+  const chainFill = document.getElementById('chainFill');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const submitBtn = document.getElementById('submitBtn');
+  let current = 1;
+  const total = steps.length;
+
+  function render(){
+    steps.forEach(s => s.classList.toggle('active', Number(s.dataset.step) === current));
+    beads.forEach(b => {
+      const n = Number(b.dataset.step);
+      b.classList.toggle('done', n < current);
+      b.classList.toggle('current', n === current);
+    });
+    chainFill.style.width = ((current - 1) / (total - 1)) * 100 + '%';
+    prevBtn.style.visibility = current === 1 ? 'hidden' : 'visible';
+    nextBtn.style.display = current === total ? 'none' : 'inline-block';
+    submitBtn.style.display = current === total ? 'inline-block' : 'none';
+  }
+
+  function validateStep(){
+    const activeStep = steps[current - 1];
+    const inputs = activeStep.querySelectorAll('input, select');
+    for (const el of inputs){
+      if (!el.reportValidity()) return false;
+    }
+    return true;
+  }
+
+  nextBtn.addEventListener('click', () => {
+    if (!validateStep()) return;
+    if (current < total){ current++; render(); window.scrollTo({top: main.offsetTop - 20, behavior:'smooth'}); }
+  });
+  prevBtn.addEventListener('click', () => {
+    if (current > 1){ current--; render(); }
+  });
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!validateStep()) return;
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'يتم الإرسال...';
+
+    const data = new FormData(form);
+    try{
+      if (GAS_URL && !GAS_URL.startsWith('PASTE_')){
+        await fetch(GAS_URL, { method:'POST', mode:'no-cors', body: data });
+      }
+      form.querySelectorAll('.step, .nav-row').forEach(el => el.style.display = 'none');
+      document.getElementById('successView').classList.add('active');
+    }catch(err){
+      alert('حدث خطأ أثناء الإرسال، حاولي مرة أخرى.');
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'إرسال طلب التسجيل';
+    }
+  });
+
+  const main = document.querySelector('main');
+  render();
+</script>
+
+</body>
+</html>
